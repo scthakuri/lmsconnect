@@ -2,9 +2,9 @@ const Idea = require('../models/Idea');
 const Vote = require('../models/Vote');
 
 const createIdea = async (req, res) => {
-    const { title, description, image } = req.body;
+    const { title, description } = req.body;
     try {
-        const idea = new Idea({ title, description, image, createdBy: req.user._id });
+        const idea = new Idea({ title, description, createdBy: req.user._id });
         await idea.save();
         res.status(201).json(idea);
     } catch (error) {

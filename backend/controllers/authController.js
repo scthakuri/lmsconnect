@@ -13,8 +13,12 @@ const register = async (req, res) => {
         if (existingEmployee) return res.status(400).json({ message: 'Employee already exists.' });
 
         const username = generateUsernameFromEmail(email);
+        if (!username) {
+            return res.status(400).json({ message: 'Invalid username generated from email.' });
+        }
+
         const hashedPassword = await bcrypt.hash(password, 10);
-        const employee = new Employee({ email, password: hashedPassword, name, username });
+        const employee = new Employee({ email, password: hashedPassword, name });
         await employee.save();
 
         const token = jwt.sign({ id: employee._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
